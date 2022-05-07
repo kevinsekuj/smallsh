@@ -15,11 +15,7 @@
 
 ## Sample 
 
-![Sample][smallshexample.png]
-
-## Technologies
-
-- [C]
+![Example of smallsh in progress](/smallshexample.png?raw=true)
 
 ## Development
 

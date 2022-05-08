@@ -303,6 +303,7 @@ void exitSmallsh()
 {
   for (int i = 0; i < MAX_LENGTH; i++)
   {
+    // if process is not null
     processes[i] ? kill(processes[i], SIGKILL) : 0;
   }
   exit(0);
@@ -412,7 +413,6 @@ void executeProgram(Command *cmd)
       if (outfp == -1)
       {
         fprintf(stderr, "%s: no such file or directory\n", cmd->outputFile);
-        fflush(stdout);
         exit(1);
       }
       // redirect stdout
@@ -426,7 +426,6 @@ void executeProgram(Command *cmd)
       if (infp == -1)
       {
         fprintf(stderr, "%s: no such file or directory\n", cmd->inputFile);
-        fflush(stdout);
         exit(1);
       }
       // redirect stdin
@@ -456,9 +455,10 @@ void executeProgram(Command *cmd)
     {
       // print pid of background process and add it to global processes array
       printf("background pid is %d\n", pid);
+      fflush(stdout);
+
       processes[currentProcess] = pid;
       currentProcess++;
-      fflush(stdout);
     }
     else
     {
@@ -572,15 +572,20 @@ void checkBackgroundProcess(Command *cmd)
  */
 void foregroundOnlyMode()
 {
+  char *message;
+  int count;
   if (!foregroundOnly)
   {
-    printf("Entering Foreground only mode.\n");
+    message = "Entering Foreground only mode\n";
+    count = 30;
     foregroundOnly = true;
   }
   else
   {
-    printf("Exiting Foreground only mode.\n");
+    message = "Exiting Foreground only mode\n";
+    count = 29;
     foregroundOnly = false;
   }
+  write(STDOUT_FILENO, message, count);
   fflush(stdout);
 }
